@@ -7,14 +7,15 @@ import (
 )
 
 func init() {
-    initializers.LoadEnvVariables()
-    initializers.ConnectToDB()
+	initializers.LoadEnvVariables()
+	initializers.ConnectToDB()
 }
 
 func main() {
-    r := gin.Default()
+	r := gin.Default()
 
-    r.POST("/posts", controllers.PostsCreate) 
+	r.POST("/posts", controllers.PostsCreate)
+	r.GET("/test", controllers.Test)
 
-    r.Run()
+	r.Run()
 }

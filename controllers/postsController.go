@@ -6,33 +6,36 @@ import (
 	"github.com/wangyaodream/ws-gin/models"
 )
 
-
 func PostsCreate(c *gin.Context) {
-    // Get data off req body
-    var body struct {
-        Body string
-        Title string
-    }
+	// Get data off req body
+	var body struct {
+		Body  string
+		Title string
+	}
 
-    c.Bind(&body)
-    
+	c.Bind(&body)
 
-    // Create a post
-    post := models.Post{
-        Title: body.Title,
-        Body: body.Body,
-    }
+	// Create a post
+	post := models.Post{
+		Title: body.Title,
+		Body:  body.Body,
+	}
 
-    result := initializers.DB.Create(&post)
+	result := initializers.DB.Create(&post)
 
+	if result.Error != nil {
+		c.Status(400)
+		return
+	}
+	// Return
 
-    if result.Error != nil {
-        c.Status(400)
-        return
-    }
-    // Return
+	c.JSON(200, gin.H{
+		"post": post,
+	})
+}
 
-    c.JSON(200, gin.H{
-        "post": post,
-    })
+func Test(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "Hello World",
+	})
 }
