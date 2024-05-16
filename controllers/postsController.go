@@ -34,8 +34,64 @@ func PostsCreate(c *gin.Context) {
 	})
 }
 
-func Test(c *gin.Context) {
+func PostIndex(c *gin.Context) {
+	// Get posts
+	var posts []models.Post
+	initializers.DB.Find(&posts)
+
+	// Respond with posts
 	c.JSON(200, gin.H{
-		"message": "Hello World",
+		"posts": posts,
 	})
+
+}
+
+func PostShow(c *gin.Context) {
+	// Get post
+	var post models.Post
+
+	var body struct {
+		ID uint `json:"id"`
+	}
+
+	c.Bind(&body)
+
+	initializers.DB.First(&post, body.ID)
+
+	// Respond with post
+	c.JSON(200, gin.H{
+		"post": post,
+	})
+}
+
+func PostUpdate(c *gin.Context) {
+	// Get the id off the params
+
+	// Get data off req body
+	var body struct {
+		ID    uint   `json:"id"`
+		Body  string `json:"body"`
+		Title string `json:"title"`
+	}
+
+	c.Bind(&body)
+
+	var post models.Post
+	initializers.DB.First(&post, body.ID)
+	// Update the post
+	initializers.DB.Model(&post).Updates(models.Post{Title: body.Title, Body: body.Body})
+
+	// Respond with post
+	c.JSON(200, gin.H{
+		"post": post,
+	})
+}
+
+func PostDelete(c *gin.Context) {
+
+	// Delete the post
+	initializers.DB.Delete(&models.Post{}, c.Param("id"))
+
+	// Respond with post
+	c.Status(200)
 }
