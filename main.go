@@ -14,11 +14,18 @@ func init() {
 func main() {
 	r := gin.Default()
 
+    // add group
+    adminGroup := r.Group("/admin")
+    apiGroup := r.Group("/api")
+
 	r.POST("/posts", controllers.PostsCreate)
 	r.GET("/index", controllers.PostIndex)
 	r.POST("/show", controllers.PostShow)
 	r.PUT("/update", controllers.PostUpdate)
 	r.DELETE("/delete/:id", controllers.PostDelete)
+
+    adminGroup.GET("/login", controllers.GetInfo)
+    apiGroup.GET("/test", controllers.Test)
 
 	r.Run()
 }
