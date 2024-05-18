@@ -8,3 +8,9 @@ func Test(c *gin.Context) {
         "message": "this is a test",
     })
 }
+
+func GetUserInfo(c *gin.Context) {
+    c.JSON(200, gin.H{
+        "message": "you have information with user",
+    })
+}

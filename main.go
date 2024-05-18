@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wangyaodream/ws-gin/controllers"
 	"github.com/wangyaodream/ws-gin/initializers"
+	"github.com/wangyaodream/ws-gin/middleware"
 )
 
 func init() {
@@ -17,6 +18,13 @@ func main() {
     // add group
     adminGroup := r.Group("/admin")
     apiGroup := r.Group("/api")
+
+    authorized := r.Group("/auth")
+
+    authorized.Use(middleware.UserAuth())
+    {
+        authorized.GET("/getinfo", controllers.GetInfo)
+    }
 
 	r.POST("/posts", controllers.PostsCreate)
 	r.GET("/index", controllers.PostIndex)
